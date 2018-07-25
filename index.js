@@ -8,6 +8,16 @@ const {
   tranformsLinkNodeToOembedNode
 } = require("./helpers");
 
+const nodePromise = (node, providers) => {
+  const endpointUrl = getProviderEndpointUrlForLinkUrl(node.url, providers);
+  return (
+    endpointUrl &&
+    fetchOembed(node.url, endpointUrl).then(response => {
+      return tranformsLinkNodeToOembedNode(node, response);
+    })
+  );
+};
+
 module.exports = ({ markdownAST }) => {
   // Step 1.  Fetch the oembed provider list.
   return fetchOembedProviders().then(providers => {
