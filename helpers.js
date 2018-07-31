@@ -1,5 +1,7 @@
 const select = require("unist-util-select");
 const axios = require("axios");
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 
 const OEMBED_PROVIDERS_URL = "https://oembed.com/providers.json";
 
@@ -51,7 +53,29 @@ exports.selectPossibleOembedLinkNodes = markdownAST => {
 };
 
 exports.tranformsLinkNodeToOembedNode = (node, oembedResult) => {
-  node.type = "html";
-  node.value = oembedResult.html;
-  return node;
+  const virtualConsole = new jsdom.VirtualConsole();
+  virtualConsole.sendTo(console);
+
+  const dom = new JSDOM(
+    oembedResult.html.replace(/((\/\/).*embed\.js)/g, 'https:$1'),
+    {
+      runScripts: "dangerously",
+      resources: "usable",
+      pretendToBeVisual: true,
+      virtualConsole
+    }
+  );
+
+  console.log('before: ', oembedResult.html);
+
+
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('after: ', dom.window.document.body.children[0].outerHTML);
+      node.type = 'html';
+      node.value = dom.window.document.body.children[0].outerHTML;
+      node.children = undefined;
+      resolve(node);
+    }, 10000);
+  });
 };
