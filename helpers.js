@@ -1,5 +1,6 @@
 const select = require("unist-util-select");
 const axios = require("axios");
+const puppeteer = require("puppeteer");
 
 const OEMBED_PROVIDERS_URL = "https://oembed.com/providers.json";
 
@@ -55,8 +56,24 @@ exports.selectPossibleOembedLinkNodes = markdownAST => {
   return select(markdownAST, "paragraph link:only-child");
 };
 
-exports.tranformsLinkNodeToOembedNode = (node, oembedResult) => {
-  node.type = "html";
-  node.value = oembedResult.html;
-  return node;
+exports.tranformsLinkNodeToOembedNode = async (node, oembedResult) => {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.setContent(
+    oembedResult.html.replace(/((\/\/).*embed\.js)/g, "https:$1")
+  );
+  const html = await page.content();
+  console.log("BEFORE", html);
+
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      const html = await page.content();
+      console.log("AFTER: ", html);
+      await browser.close();
+      node.type = "html";
+      node.value = html;
+      node.children = undefined;
+      resolve(node);
+    }, 30000);
+  });
 };
