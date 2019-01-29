@@ -21,6 +21,17 @@ const ENDPOINTS = {
   }
 };
 
+const NEW_PROVIDERS = [
+  {
+    provider_name: "DataStudio",
+    provider_url: "https://datastudio.google.com/",
+    endpoints: [{
+      schemes: ["https://datastudio.google.com/embed/reporting/*"],
+      url: "https://datastudio.google.com/embed"
+    }]
+  }
+]
+
 const ADD_HTTPS_TO_SCHEMES = [
   "amCharts Live Editor",
   "YouTube",
@@ -83,7 +94,7 @@ exports.ammendProviders = providers => {
       }
     );
     return provider;
-  });
+  }).concat(NEW_PROVIDERS);
 };
 
 exports.filterProviders = (providers, filter) => {

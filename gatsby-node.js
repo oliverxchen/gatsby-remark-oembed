@@ -6,11 +6,10 @@ const {
 } = require("./helpers");
 
 exports.onPreBootstrap = async ({ cache }, rawOptions) => {
-  console.log('ONPREBOOTSTRAP');
   const options = ammendOptions(rawOptions);
+  console.log('options');
+  console.log(options);
   const rawProviders = await fetchOembedProviders();
-  console.log('rawProviders');
-  console.log(rawProviders);
   const providers = processProviders(rawProviders, options);
   console.log('providers');
   console.log(providers);
@@ -18,9 +17,6 @@ exports.onPreBootstrap = async ({ cache }, rawOptions) => {
 };
 
 const processProviders = (providers, options) => {
-  console.log('PROCESSPROVIDERS');
   providers = ammendProviders(providers);
-  console.log('providers');
-  console.log(providers);
   return filterProviders(providers, options.providers);
 };
