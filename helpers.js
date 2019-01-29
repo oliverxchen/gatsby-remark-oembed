@@ -14,6 +14,10 @@ const ENDPOINTS = {
   Nasjonalbiblioteket: {
     schemes: ["https://www.nb.no/items/*"],
     url: "https://api.nb.no/catalog/v1/oembed"
+  },
+  DataStudio: {
+    schemes: ["https://datastudio.google.com/embed/reporting/*"],
+    url: "https://datastudio.google.com/embed"
   }
 };
 
