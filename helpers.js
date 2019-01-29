@@ -15,19 +15,16 @@ const ENDPOINTS = {
     schemes: ["https://www.nb.no/items/*"],
     url: "https://api.nb.no/catalog/v1/oembed"
   },
-  DataStudio: {
-    schemes: ["https://datastudio.google.com/embed/reporting/*"],
-    url: "https://datastudio.google.com/embed"
-  }
 };
 
 const NEW_PROVIDERS = [
   {
     provider_name: "DataStudio",
-    provider_url: "https://datastudio.google.com/",
+    provider_url: "https://datastudio.google.com",
     endpoints: [{
-      schemes: ["https://datastudio.google.com/embed/reporting/*"],
-      url: "https://datastudio.google.com/embed"
+      schemes: ["https://datastudio.google.com/embed/reporting/*/page/*"],
+      url: "https://datastudio.google.com/embed",
+      formats: ["json"]
     }]
   }
 ]

@@ -13,6 +13,8 @@ exports.onPreBootstrap = async ({ cache }, rawOptions) => {
   const providers = processProviders(rawProviders, options);
   console.log('providers');
   console.log(providers);
+  console.log(providers[0].endpoints);
+  console.log(providers[1].endpoints);
   await cache.set("remark-oembed-providers", providers);
 };
 
